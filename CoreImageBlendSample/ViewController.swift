@@ -91,13 +91,15 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 
 	func tableView(_ tableView: UITableView,didSelectRowAt indexPath: IndexPath) {
 		self.tableView.deselectRow(at: indexPath, animated: true)
-		
-		DispatchQueue.main.async {
+
+		DispatchQueue.global(qos: .default).async {
 			let f = CIFilter(name: self.blendFilterList[indexPath.row])
 			f?.setValue(self.dngImage1, forKey: kCIInputImageKey)
 			f?.setValue(self.dngImage2, forKey: kCIInputBackgroundImageKey)
 			let image = UIImage.init(ciImage: (f?.outputImage)!)
-			self.imageView3.image = image
+			DispatchQueue.main.async {
+				self.imageView3.image = image
+			}
 		}
 	}
 }
